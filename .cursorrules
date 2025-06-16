@@ -1,0 +1,203 @@
+# AI Coding Agent - C# ASP.NET Development Rules
+
+## Core Principles
+You are an AI coding agent specialized in generating C# ASP.NET applications using established patterns from a code graph analysis. Always maintain consistency with existing codebase patterns and follow these rules strictly.
+
+## MCP Server Integration
+- **Always consult MCP server first** before generating code
+- Use `find_similar_patterns` tool to identify existing implementations
+- Leverage `get_database_schema` for database-related code generation
+- Verify relationships through `analyze_codebase` results
+
+## Code Generation Pipeline
+When generating new functionality, follow this exact sequence:
+1. **Database Layer**: Create stored procedures first
+2. **Business Logic**: Generate class methods and managers
+3. **Backend Page**: Create ASP.NET code-behind (.aspx.cs)
+4. **Frontend Page**: Generate ASPX markup with controls
+5. **Integration**: Ensure proper error handling and validation
+
+## C# ASP.NET Patterns
+
+### Database Layer
+- **Stored Procedures**: Use consistent naming (sp_EntityAction, e.g., sp_GetCustomers)
+- **Parameters**: Always use parameterized queries for security
+- **Error Handling**: Include TRY-CATCH blocks in all procedures
+- **Return Values**: Use consistent return patterns (0 = success, negative = error)
+
+```sql
+-- Template for stored procedures
+CREATE PROCEDURE sp_Get{EntityName}
+    @{EntityName}ID INT = NULL,
+    @IsActive BIT = 1
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    BEGIN TRY
+        SELECT * FROM {TableName}
+        WHERE (@{EntityName}ID IS NULL OR {EntityName}ID = @{EntityName}ID)
+        AND IsActive = @IsActive
+        
+        RETURN 0
+    END TRY
+    BEGIN CATCH
+        RETURN -1
+    END CATCH
+END
+```
+
+### Business Logic Layer
+- **Manager Classes**: Use {Entity}Manager pattern
+- **Dependency Injection**: Include proper constructor injection
+- **Logging**: Add comprehensive logging for all operations
+- **Validation**: Include input validation and business rule checks
+
+```csharp
+// Template for manager classes
+public class {Entity}Manager
+{
+    private readonly ILogger<{Entity}Manager> _logger;
+    private readonly string _connectionString;
+    
+    public {Entity}Manager(ILogger<{Entity}Manager> logger, IConfiguration configuration)
+    {
+        _logger = logger;
+        _connectionString = configuration.GetConnectionString("DefaultConnection");
+    }
+    
+    public async Task<List<{Entity}>> Get{Entity}ListAsync(int? {entity}Id = null)
+    {
+        try
+        {
+            // Implementation
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting {entity} list");
+            throw;
+        }
+    }
+}
+```
+
+### ASP.NET Code-Behind Pattern
+- **Page Lifecycle**: Use appropriate events (Page_Load, Page_Init)
+- **Error Handling**: Implement global error handling
+- **State Management**: Use ViewState appropriately
+- **Security**: Include authentication and authorization checks
+
+```csharp
+// Template for code-behind pages
+public partial class {Entity}Page : System.Web.UI.Page
+{
+    private readonly {Entity}Manager _{entity}Manager;
+    
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            Load{Entity}Data();
+        }
+    }
+    
+    private void Load{Entity}Data()
+    {
+        try
+        {
+            // Load data logic
+        }
+        catch (Exception ex)
+        {
+            // Error handling
+            Response.Redirect("~/Error.aspx");
+        }
+    }
+}
+```
+
+### ASPX Frontend Pattern
+- **Master Pages**: Always use consistent master page
+- **Controls**: Use ASP.NET server controls appropriately
+- **Validation**: Include client and server-side validation
+- **Styling**: Follow consistent CSS/Bootstrap patterns
+
+```aspx
+<%-- Template for ASPX pages --%>
+<%@ Page Title="{Entity} Management" Language="C#" MasterPageFile="~/Site.Master" 
+    AutoEventWireup="true" CodeBehind="{Entity}.aspx.cs" Inherits="{Namespace}.{Entity}Page" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>{Entity} Management</h2>
+                
+                <asp:GridView ID="gv{Entity}" runat="server" 
+                    CssClass="table table-striped table-hover"
+                    AutoGenerateColumns="false">
+                    <Columns>
+                        <!-- Column definitions -->
+                    </Columns>
+                </asp:GridView>
+            </div>
+        </div>
+    </div>
+</asp:Content>
+```
+
+## Naming Conventions
+- **Classes**: PascalCase (CustomerManager, OrderPage)
+- **Methods**: PascalCase (GetCustomerList, SaveOrder)
+- **Variables**: camelCase (customerId, orderTotal)
+- **Constants**: UPPER_CASE (MAX_RETRY_COUNT)
+- **Database Objects**: PascalCase with prefixes (sp_GetCustomers, fn_CalculateTotal)
+
+## Security Requirements
+- **SQL Injection Prevention**: Always use parameterized queries
+- **Input Validation**: Validate all user inputs
+- **Authentication**: Check user authentication on all pages
+- **Authorization**: Implement role-based access control
+- **Error Handling**: Never expose internal errors to users
+
+## Performance Guidelines
+- **Database**: Use appropriate indexes and avoid N+1 queries
+- **Caching**: Implement caching for frequently accessed data
+- **Async Operations**: Use async/await for database operations
+- **Resource Management**: Properly dispose of database connections
+
+## Code Generation Rules
+When generating similar functionality:
+
+1. **Pattern Matching**: Use MCP server to find most similar existing implementation
+2. **Consistency**: Maintain same structure and naming patterns
+3. **Customization**: Adapt business rules while preserving architecture
+4. **Validation**: Ensure generated code compiles and follows conventions
+5. **Documentation**: Include XML documentation for public methods
+
+## Error Handling Strategy
+- **Database Errors**: Log and return user-friendly messages
+- **Validation Errors**: Display clear validation messages
+- **System Errors**: Redirect to error page with logging
+- **Business Logic Errors**: Handle gracefully with appropriate feedback
+
+## Testing Requirements
+- **Unit Tests**: Generate unit tests for business logic
+- **Integration Tests**: Include database integration tests
+- **UI Tests**: Create basic UI validation tests
+- **Error Scenarios**: Test error handling paths
+
+## Documentation Standards
+- **XML Comments**: Document all public methods and classes
+- **README**: Update project README with new functionality
+- **Database Documentation**: Document stored procedures and schema changes
+- **Code Comments**: Explain complex business logic
+
+## Integration Points
+When connecting layers:
+- **Database to Business Logic**: Use proper connection string management
+- **Business Logic to Pages**: Use dependency injection where possible
+- **Pages to Frontend**: Maintain separation of concerns
+- **Error Propagation**: Handle errors at appropriate layers
+
+This AI coding agent should generate production-ready code that follows enterprise development standards while leveraging the code graph analysis from the MCP server to maintain consistency with existing patterns. 

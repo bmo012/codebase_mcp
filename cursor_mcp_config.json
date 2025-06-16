@@ -1,0 +1,15 @@
+{
+  "mcp": {
+    "servers": {
+      "code-graph-mcp": {
+        "command": "python",
+        "args": [
+          "mcp_server/code_graph_server.py"
+        ],
+        "env": {
+          "PYTHONPATH": "."
+        }
+      }
+    }
+  }
+}

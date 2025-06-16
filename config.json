@@ -1,0 +1,54 @@
+{
+  "mcp_server": {
+    "host": "localhost",
+    "port": 8000,
+    "name": "code-graph-mcp"
+  },
+  "database": {
+    "connection_string": "Server=localhost;Database=YourAppDB;Trusted_Connection=true;",
+    "timeout": 30,
+    "max_pool_size": 100
+  },
+  "ai_models": {
+    "openai": {
+      "api_key": "${OPENAI_API_KEY}",
+      "model": "gpt-4",
+      "temperature": 0.2,
+      "max_tokens": 4000
+    },
+    "anthropic": {
+      "api_key": "${ANTHROPIC_API_KEY}",
+      "model": "claude-3-sonnet-20241022",
+      "temperature": 0.2,
+      "max_tokens": 4000
+    }
+  },
+  "code_analysis": {
+    "supported_extensions": [".cs", ".aspx", ".sql", ".js", ".css"],
+    "exclude_patterns": ["bin/", "obj/", "packages/", ".git/"],
+    "max_file_size_mb": 10
+  },
+  "pattern_matching": {
+    "similarity_threshold": 0.7,
+    "max_patterns_returned": 5,
+    "pattern_types": [
+      "database_crud",
+      "aspx_page",
+      "business_logic",
+      "api_endpoint",
+      "validation_logic"
+    ]
+  },
+  "code_generation": {
+    "templates_path": "./templates",
+    "output_path": "./generated_code",
+    "namespace_prefix": "YourApp",
+    "backup_existing": true
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "mcp_server.log",
+    "max_size_mb": 50,
+    "backup_count": 5
+  }
+} 
