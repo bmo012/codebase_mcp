@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "code-graph-mcp": {
+      "command": "python",
+      "args": [
+        "mcp_server/enhanced_code_graph_server.py"
+      ],
+      "env": {
+        "PYTHONPATH": ".",
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  }
+}

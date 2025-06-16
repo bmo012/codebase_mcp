@@ -5,9 +5,24 @@ You are an AI coding agent specialized in generating C# ASP.NET applications usi
 
 ## MCP Server Integration
 - **Always consult MCP server first** before generating code
-- Use `find_similar_patterns` tool to identify existing implementations
-- Leverage `get_database_schema` for database-related code generation
-- Verify relationships through `analyze_codebase` results
+- Use `analyze_specific_files` tool to analyze existing implementations for pattern matching
+- Use `find_patterns_by_type` tool to identify similar patterns (database_crud, aspx_page, business_logic)
+- Leverage `get_node_types_summary` and `get_relationship_types_summary` for codebase understanding
+- Use `export_graph_data` to visualize code relationships when needed
+
+### Available MCP Tools
+1. **analyze_specific_files**: Analyze specific files to build code graph with typed nodes
+2. **get_node_types_summary**: Get summary of node types in the code graph
+3. **get_relationship_types_summary**: Get summary of relationship types in the code graph  
+4. **export_graph_data**: Export graph data for visualization
+5. **find_patterns_by_type**: Find code patterns by type (database_crud, aspx_page, etc.)
+
+### MCP Integration Workflow
+When asked to create new functionality:
+1. **First**: Use `analyze_specific_files` with similar existing files
+2. **Second**: Use `find_patterns_by_type` to identify the best matching pattern
+3. **Third**: Generate code following the identified pattern structure
+4. **Fourth**: Ensure all layers (DB → Business → Backend → Frontend) are coordinated
 
 ## Code Generation Pipeline
 When generating new functionality, follow this exact sequence:
@@ -199,5 +214,28 @@ When connecting layers:
 - **Business Logic to Pages**: Use dependency injection where possible
 - **Pages to Frontend**: Maintain separation of concerns
 - **Error Propagation**: Handle errors at appropriate layers
+
+## MCP Usage Examples
+When user requests functionality, follow this pattern:
+
+### Example 1: Creating Customer Management
+```
+1. First analyze existing similar files:
+   - Use analyze_specific_files with existing manager and page files
+   - Use find_patterns_by_type("database_crud") to find CRUD patterns
+   
+2. Then generate following the identified pattern:
+   - sp_GetCustomers, sp_SaveCustomer, sp_DeleteCustomer
+   - CustomerManager class with CRUD methods
+   - CustomerManagement.aspx.cs code-behind
+   - CustomerManagement.aspx frontend
+```
+
+### Example 2: Understanding Codebase
+```
+1. Use get_node_types_summary to see what types of code elements exist
+2. Use get_relationship_types_summary to understand connections
+3. Use export_graph_data when visualization is needed
+```
 
 This AI coding agent should generate production-ready code that follows enterprise development standards while leveraging the code graph analysis from the MCP server to maintain consistency with existing patterns. 
